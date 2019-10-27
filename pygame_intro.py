@@ -3,7 +3,7 @@ from pygame.locals import *
 
 pygame.init()
 
-DISPLAYSURF = pygame.display.set_mode((400,300))
+SURFACE = pygame.display.set_mode((500,400))
  
 pygame.display.set_caption('Hello, World!')
 
@@ -22,8 +22,14 @@ pygame.display.set_caption('Hello, World!')
 # Silver    = (192, 192, 192)
 # Teal      = (0, 128, 128)
 # White     = (255, 255, 255)
-#YELLOW    = (255, 255, 0)
+RED       = (255, 0, 0)
+YELLOW    = (255, 255, 0)
 
+pygame.draw.line(SURFACE,YELLOW,(100,200),(300,200),5)
+pygame.draw.line(SURFACE,RED,(250,100),(250,300),5)
+pygame.draw.circle(SURFACE,YELLOW,(250,200),30)
+
+pygame.display.update()
 #spamRect = pygame.Rect((10,20,200,300))
 #pygame.draw.polygon(DISPLAYSURF,GREEN, ((146,0),(291,106),(236,277),(56,277),(0,106)))
 #pygame.draw.line(DISPLAYSURF,BLUE,(60,60),(120,60),4)
@@ -40,14 +46,11 @@ pygame.display.set_caption('Hello, World!')
 
 #DISPLAYSURF.blit(cat,(20,20))
 #DISPLAYSURF.blit(textSurface,textRect)
-#while True:
-#    for event in pygame.event.get():
-#        if event.type == QUIT:
-#            pygame.quit()
-#            sys.exit()
-    #anotherSurface.blit()
-    #anotherSurface.fill(YellowTransparent)
+while True:
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
     #DISPLAYSURF.blit(anotherSurface,(0,0))
     #DISPLAYSURF.fill(YellowTransparent)
 
-    pygame.display.update()
