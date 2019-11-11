@@ -4,7 +4,9 @@ from pygame.locals import *
 
 pygame.init()
 
-SURFACE = pygame.display.set_mode((500,400))
+WINDOWHEIGHT=400
+WINDOWLENGTH=500
+SURFACE = pygame.display.set_mode((WINDOWLENGTH,WINDOWHEIGHT))
  
 pygame.display.set_caption('Hello, World!')
 
@@ -26,27 +28,36 @@ GREEN     = (0, 255, 0)
 RED       = (255, 0, 0)
 YELLOW    = (255, 255, 0)
 
+tileWidth = 65
+tileHeight = 65
 
-#spamRect = pygame.Rect((10,20,200,300))
-#pygame.draw.polygon(DISPLAYSURF,GREEN, ((146,0),(291,106),(236,277),(56,277),(0,106)))
-#pygame.draw.line(DISPLAYSURF,BLUE,(60,60),(120,60),4)
-#pygame.draw.circle(DISPLAYSURF,RED,(300,50),20,0)
-#pygame.draw.ellipse(DISPLAYSURF,RED,(300,250,40,80),1)
-#pygame.draw.rect(DISPLAYSURF,RED,(200,150,100,50))
+# Load main file
+sprite = pygame.image.load('sokoban.png')
 
-cat = pygame.image.load("cat.png")
-#cat2 = pygame.transform.scale(cat,(50,50))
-x_cat = 100
-y_cat = 100
-#SURFACE.blit(cat2,(50,50))
+# Hero
+heroRectRight = pygame.Rect((0,tileHeight*2,tileWidth,tileHeight))
+heroRight = sprite.subsurface(heroRectRight)
+heroRectDown = pygame.Rect((tileWidth,tileHeight*2,tileWidth,tileHeight))
+heroDown = sprite.subsurface(heroRectDown)
+heroRectUp = pygame.Rect((0,tileHeight*3,tileWidth,tileHeight))
+heroUp = sprite.subsurface(heroRectUp)
+heroRectLeft = pygame.Rect((tileWidth,tileHeight*3,tileWidth,tileHeight))
+heroLeft = sprite.subsurface(heroRectLeft)
 
+#Box
+boxRect = pygame.Rect((0,0,tileWidth,tileHeight))
+box = sprite.subsurface(boxRect)
+boxRectGoal = pygame.Rect((tileWidth,0,tileWidth,tileHeight))
+boxGoal = sprite.subsurface(boxRectGoal)
+
+xHero = 100
+yHero = 100
 
 #font = pygame.font.Font("freesansbold.ttf",32)
 #textSurface = font.render("Hello, World!",True, GREEN,BLUE)
 #textRect = textSurface.get_rect()
 #textRect.center = (200, 150)
 
-#DISPLAYSURF.blit(textSurface,textRect)
 while True:
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -54,16 +65,22 @@ while True:
             sys.exit()
         if event.type == KEYDOWN:
             if event.key == K_RIGHT:
-                x_cat = x_cat + 20
+                if xHero<=WINDOWHEIGHT-20:
+                    xHero = xHero + 20
             if event.key == K_LEFT:
-                x_cat = x_cat - 20
-                #pygame.draw.line(SURFACE,GREEN,(300,300),(400,400),10)
+                xHero = xHero - 20
     SURFACE.fill(BLACK)
-    pygame.draw.line(SURFACE,YELLOW,(100,200),(300,200),5)
-    pygame.draw.line(SURFACE,RED,(250,100),(250,300),5)
-    pygame.draw.circle(SURFACE,YELLOW,(250,200),30)
 
-    SURFACE.blit(cat,(x_cat,y_cat))
+    # Hero
+    SURFACE.blit(heroRight,(xHero,yHero))
+    SURFACE.blit(heroDown,(10,10))
+    SURFACE.blit(heroLeft,(40,40))
+    SURFACE.blit(heroDown,(60,60))
+    
+    SURFACE.blit(box,(100,100))
+    SURFACE.blit(boxGoal,(120,120))
+    
+
     pygame.display.update()
 
     #DISPLAYSURF.blit(anotherSurface,(0,0))
