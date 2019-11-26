@@ -3,9 +3,25 @@ import pygame.transform
 from pygame.locals import *
 
 pygame.init()
+level1=[['*','*','*','*',' ',' ',' '],
+	    ['*','G',' ','*','*',' ',' '],
+	    ['*','G','H',' ','*',' ',' '],
+	    ['*','G',' ','b','*',' ',' '],
+	    ['*','*','b',' ','*','*','*'],
+	    [' ','*',' ','b',' ',' ','*'],
+        [' ','*',' ',' ',' ',' ','*'],
+	    [' ','*',' ',' ','*','*','*'],
+	    [' ','*','*','*','*',' ',' ']]
 
-WINDOWHEIGHT=400
-WINDOWLENGTH=500
+rowSize = len(level1)
+columnSize = len(level1[0])
+
+tileWidth = 64
+tileHeight = 64
+
+WINDOWHEIGHT=tileHeight*rowSize
+WINDOWLENGTH=tileWidth*columnSize
+
 SURFACE = pygame.display.set_mode((WINDOWLENGTH,WINDOWHEIGHT))
  
 pygame.display.set_caption('Hello, World!')
@@ -28,8 +44,7 @@ GREEN     = (0, 255, 0)
 RED       = (255, 0, 0)
 YELLOW    = (255, 255, 0)
 
-tileWidth = 64
-tileHeight = 64
+
 
 # Load main file
 sprite = pygame.image.load('sokoban.png')
@@ -61,17 +76,7 @@ wall = sprite.subsurface(wallRect)
 grassRect = pygame.Rect((tileWidth*2,tileHeight,tileWidth,tileHeight))
 grass = sprite.subsurface(grassRect)
 
-level1=[['*','*','*','*','*','*','*'],
-        ['*',' ',' ',' ',' ',' ','*'],
-        ['*',' ',' ',' ',' ',' ','*'],
-        ['*',' ',' ',' ',' ',' ','*'],
-        ['*',' ',' ',' ',' ',' ','*'],
-        ['*',' ',' ',' ',' ',' ','*'],
-        ['*','*','*','*','*','*','*']]
 
-
-rowSize = len(level1)
-columnSize = len(level1[0])
 
 while True:
     for event in pygame.event.get():
@@ -79,35 +84,29 @@ while True:
             pygame.quit()
             sys.exit()
             
-        #if event.type == KEYDOWN:
-         #   if event.key == K_RIGHT:
-          #      if xHero<=WINDOWHEIGHT-20:
-           #         xHero = xHero + 20
-            #if event.key == K_LEFT:
-             #   xHero = xHero - 20
+       
     SURFACE.fill(BLACK)
-    
     #Draw the level
     for row in range(rowSize):
         for column in range(columnSize):
             if level1[row][column] == "*":
-                SURFACE.blit(wall,(0,0))
+                SURFACE.blit(wall,(tileWidth*column,row*tileHeight))
             elif level1[row][column] == " ":
-                SURFACE.blit(grass,(100,100))
+                SURFACE.blit(grass,(tileWidth*column,row*tileHeight))
+            elif level1[row][column] == "H":
+                SURFACE.blit(grass,(tileWidth*column,row*tileHeight))
+                SURFACE.blit(heroDown,(tileWidth*column,row*tileHeight))
+            elif level1[row][column] == "b":
+                SURFACE.blit(box,(tileWidth*column,row*tileHeight))
+            elif level1[row][column] == "G":
+                SURFACE.blit(boxGoal,(tileWidth*column,row*tileHeight))
                 
-    # Hero
-    #SURFACE.blit(heroRight,(xHero,yHero))
-    #SURFACE.blit(heroDown,(10,10))
-    #SURFACE.blit(heroLeft,(40,40))
-    #SURFACE.blit(heroDown,(60,60))
+        #if event.type == KEYDOWN:
+        #    if event.key == K_RIGHT:
+        #        if xHero<=WINDOWHEIGHT-20:
+        #            xHero = xHero + 20
+        #    if event.key == K_LEFT:
+        #        xHero = xHero - 20
     
-    #SURFACE.blit(box,(100,100))
-    #SURFACE.blit(boxGoal,(120,120))
-    #SURFACE.blit(wall,(150,150))
-    #SURFACE.blit(grass,(150+tileWidth,150))
     
-    pygame.display.update()
-
-    #DISPLAYSURF.blit(anotherSurface,(0,0))
-    #DISPLAYSURF.fill(YellowTransparent)
-
+    pygame.display.update()   
