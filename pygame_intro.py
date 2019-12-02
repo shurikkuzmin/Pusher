@@ -6,11 +6,11 @@ pygame.init()
 level1=[['*','*','*','*',' ',' ',' '],
 	    ['*','G',' ','*','*',' ',' '],
 	    ['*','G','H',' ','*',' ',' '],
-	    ['*','G',' ','b','*',' ',' '],
-	    ['*','*','b',' ','*','*','*'],
-	    [' ','*',' ','b',' ',' ','*'],
+	    ['*','G',' ','B','*',' ',' '],
+	    ['*','*','B',' ','*','*','*'],
+	    [' ','*',' ','B',' ',' ','*'],
         [' ','*',' ',' ',' ',' ','*'],
-	    [' ','*',' ',' ','*','*','*'],
+	    [' ','*','T',' ','*','*','*'],
 	    [' ','*','*','*','*',' ',' ']]
 
 rowSize = len(level1)
@@ -24,6 +24,7 @@ WINDOWLENGTH=tileWidth*columnSize
 
 SURFACE = pygame.display.set_mode((WINDOWLENGTH,WINDOWHEIGHT))
  
+
 pygame.display.set_caption('Hello, World!')
 
 # Aqua      = (0, 255, 255)
@@ -65,8 +66,15 @@ box = sprite.subsurface(boxRect)
 boxRectGoal = pygame.Rect((tileWidth,0,tileWidth,tileHeight))
 boxGoal = sprite.subsurface(boxRectGoal)
 
-xHero = 100
-yHero = 100
+#Target
+targetRect = pygame.Rect((tileWidth,tileHeight,tileWidth,tileHeight))
+target = sprite.subsurface(targetRect)
+
+for i in range(rowSize):
+    for j in range(columnSize):
+        if level1[i][j] == 'H':
+            xHero = j
+            yHero = i 
 
 #Wall
 wallRect = pygame.Rect((tileWidth*2,0,tileWidth,tileHeight))
@@ -76,14 +84,41 @@ wall = sprite.subsurface(wallRect)
 grassRect = pygame.Rect((tileWidth*2,tileHeight,tileWidth,tileHeight))
 grass = sprite.subsurface(grassRect)
 
-
+hero = heroDown
 
 while True:
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
-            
+        if event.type == KEYDOWN:
+            if event.key == K_RIGHT:
+                hero = heroRight
+                if level1[yHero][xHero+1] != '*':
+                    level1[yHero][xHero] = ' '
+                    xHero = xHero + 1
+                    level1[yHero][xHero] = 'H'
+                
+            if event.key == K_LEFT:
+                hero = heroLeft
+                if level1[yHero][xHero-1] != '*':
+                    level1[yHero][xHero] = ' '
+                    xHero = xHero - 1
+                    level1[yHero][xHero] = 'H'
+                    
+            if event.key == K_UP:
+                hero = heroUp
+                if level1[yHero-1][xHero] != '*':
+                    level1[yHero][xHero] = ' '
+                    yHero = yHero - 1
+                    level1[yHero][xHero] = 'H'
+                
+            if event.key == K_DOWN:
+                hero = heroDown
+                if level1[yHero+1][xHero] != '*':
+                    level1[yHero][xHero] = ' '
+                    yHero = yHero + 1
+                    level1[yHero][xHero] = 'H'
        
     SURFACE.fill(BLACK)
     #Draw the level
@@ -95,18 +130,14 @@ while True:
                 SURFACE.blit(grass,(tileWidth*column,row*tileHeight))
             elif level1[row][column] == "H":
                 SURFACE.blit(grass,(tileWidth*column,row*tileHeight))
-                SURFACE.blit(heroDown,(tileWidth*column,row*tileHeight))
-            elif level1[row][column] == "b":
+                SURFACE.blit(hero,(tileWidth*column,row*tileHeight))
+            elif level1[row][column] == "B":
                 SURFACE.blit(box,(tileWidth*column,row*tileHeight))
             elif level1[row][column] == "G":
                 SURFACE.blit(boxGoal,(tileWidth*column,row*tileHeight))
+            elif level1[row][column] == "T":
+                SURFACE.blit(target,(tileWidth*column,row*tileHeight))    
                 
-        #if event.type == KEYDOWN:
-        #    if event.key == K_RIGHT:
-        #        if xHero<=WINDOWHEIGHT-20:
-        #            xHero = xHero + 20
-        #    if event.key == K_LEFT:
-        #        xHero = xHero - 20
-    
+            
     
     pygame.display.update()   
