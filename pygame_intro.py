@@ -4,13 +4,13 @@ from pygame.locals import *
 
 pygame.init()
 level1=[['*','*','*','*',' ',' ',' '],
-	    ['*','G',' ','*','*',' ',' '],
-	    ['*','G','H',' ','*',' ',' '],
-	    ['*','G',' ','B','*',' ',' '],
+	    ['*','T',' ','*','*',' ',' '],
+	    ['*','T','H',' ','*',' ',' '],
+	    ['*','T',' ','B','*',' ',' '],
 	    ['*','*','B',' ','*','*','*'],
 	    [' ','*',' ','B',' ',' ','*'],
-        [' ','*',' ',' ',' ',' ','*'],
-	    [' ','*','T',' ','*','*','*'],
+        [' ','*',' ','T',' ',' ','*'],
+	    [' ','*',' ',' ','*','*','*'],
 	    [' ','*','*','*','*',' ',' ']]
 
 rowSize = len(level1)
@@ -116,9 +116,30 @@ while True:
             if event.key == K_DOWN:
                 hero = heroDown
                 if level1[yHero+1][xHero] != '*':
+                    if level1[yHero+1][xHero] == "B":
+                        if level1[yHero+2][xHero] == "T":
+                            level1[yHero+2][xHero] = "G"
+                        elif level1[yHero+2][xHero] == " ":
+                            level1[yHero+2][xHero] = 'B'
+                        elif level1[yHero+2][xHero] == "*":   
+                            continue
+                    
+                    elif level1[yHero+1][xHero] == "G":
+                        if level1[yHero+2][xHero] == "*":
+                            continue
+                        elif level1[yHero+2][xHero] == ' ':
+                            level1[yHero+2][xHero] = 'B'
+                            level1[yHero+1][xHero] = 'I'
+                            
+                            
+                    # use return move true or false to move the Hero?
                     level1[yHero][xHero] = ' '
                     yHero = yHero + 1
                     level1[yHero][xHero] = 'H'
+                    
+                    
+                    
+            
        
     SURFACE.fill(BLACK)
     #Draw the level
@@ -128,6 +149,8 @@ while True:
                 SURFACE.blit(wall,(tileWidth*column,row*tileHeight))
             elif level1[row][column] == " ":
                 SURFACE.blit(grass,(tileWidth*column,row*tileHeight))
+            elif level1[row][column] == "T":
+                SURFACE.blit(target,(tileWidth*column,row*tileHeight))    
             elif level1[row][column] == "H":
                 SURFACE.blit(grass,(tileWidth*column,row*tileHeight))
                 SURFACE.blit(hero,(tileWidth*column,row*tileHeight))
@@ -135,8 +158,10 @@ while True:
                 SURFACE.blit(box,(tileWidth*column,row*tileHeight))
             elif level1[row][column] == "G":
                 SURFACE.blit(boxGoal,(tileWidth*column,row*tileHeight))
-            elif level1[row][column] == "T":
-                SURFACE.blit(target,(tileWidth*column,row*tileHeight))    
+            elif level1[row][column] == "I":
+                SURFACE.blit(target,(tileWidth*column,row*tileHeight)) 
+                SURFACE.blit(hero,(tileWidth*column,row*tileHeight))
+                
                 
             
     
