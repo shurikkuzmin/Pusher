@@ -86,61 +86,7 @@ grass = sprite.subsurface(grassRect)
 
 hero = heroDown
 
-while True:
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            pygame.quit()
-            sys.exit()
-        if event.type == KEYDOWN:
-            if event.key == K_RIGHT:
-                hero = heroRight
-                if level1[yHero][xHero+1] != '*':
-                    level1[yHero][xHero] = ' '
-                    xHero = xHero + 1
-                    level1[yHero][xHero] = 'H'
-                
-            if event.key == K_LEFT:
-                hero = heroLeft
-                if level1[yHero][xHero-1] != '*':
-                    level1[yHero][xHero] = ' '
-                    xHero = xHero - 1
-                    level1[yHero][xHero] = 'H'
-                    
-            if event.key == K_UP:
-                hero = heroUp
-                if level1[yHero-1][xHero] != '*':
-                    level1[yHero][xHero] = ' '
-                    yHero = yHero - 1
-                    level1[yHero][xHero] = 'H'
-                
-            if event.key == K_DOWN:
-                hero = heroDown
-                if level1[yHero+1][xHero] != '*':
-                    if level1[yHero+1][xHero] == "B":
-                        if level1[yHero+2][xHero] == "T":
-                            level1[yHero+2][xHero] = "G"
-                        elif level1[yHero+2][xHero] == " ":
-                            level1[yHero+2][xHero] = 'B'
-                        elif level1[yHero+2][xHero] == "*":   
-                            continue
-                    
-                    elif level1[yHero+1][xHero] == "G":
-                        if level1[yHero+2][xHero] == "*":
-                            continue
-                        elif level1[yHero+2][xHero] == ' ':
-                            level1[yHero+2][xHero] = 'B'
-                            level1[yHero+1][xHero] = 'I'
-                            
-                            
-                    # use return move true or false to move the Hero?
-                    level1[yHero][xHero] = ' '
-                    yHero = yHero + 1
-                    level1[yHero][xHero] = 'H'
-                    
-                    
-                    
-            
-       
+def drawLevel():
     SURFACE.fill(BLACK)
     #Draw the level
     for row in range(rowSize):
@@ -161,6 +107,68 @@ while True:
             elif level1[row][column] == "I":
                 SURFACE.blit(target,(tileWidth*column,row*tileHeight)) 
                 SURFACE.blit(hero,(tileWidth*column,row*tileHeight))
+
+while True:
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+        if event.type == KEYDOWN:
+            if event.key == K_RIGHT:
+                hero = heroRight
+                xNew = xHero+1
+                yNew = yHero
+                xNew2 = xHero+2
+                yNew2 = yHero 
+            if event.key == K_LEFT:
+                hero = heroLeft
+                xNew = xHero - 1
+                yNew = yHero
+                xNew2 = xHero-2
+                yNew2 = yHero
+                    
+            if event.key == K_UP:
+                hero = heroUp
+                yNew = yHero - 1
+                xNew = xHero
+                yNew2 = yHero - 2
+                xNew2 = xHero
+                 
+            if event.key == K_DOWN:
+                hero = heroDown
+                yNew = yHero + 1
+                xNew = xHero
+                yNew2 = yHero + 2
+                xNew2 = xHero
+                
+            if level1[yNew][xNew] != '*':
+                
+                if level1[yHero][xHero] == "H":
+                    oldTile = " "
+                if level1[yHero][xHero] == "I":
+                    oldTile = "T"
+                    
+                if level1[yNew][xNew] == "B" or level1[yNew][xNew] == "G":
+                    if level1[yNew2][xNew2] == "T":                       
+                        level1[yNew2][xNew2] = "G"
+                    elif level1[yNew2][xNew2] == " ":
+                        level1[yNew2][xNew2] = "B"
+                    elif level1[yNew2][xNew] == "*":   
+                        continue
+                    
+                    level1[yHero][xHero] = oldTile
+                    if level1[yNew][xNew] == "G":
+                        level1[yNew][xNew]="I"
+                    if level1[yNew][xNew] == "B":
+                        level1[yNew][xNew]  = "H"
+                    xHero = xNew
+                    yHero = yNew
+                elif level1[yNew][xNew] == " ":
+                    level1[yNew][xNew] = "H"
+                    level1[yHero][xHero] = oldTile 
+                    xHero = xNew
+                    yHero = yNew
+    drawLevel()       
                 
                 
             
