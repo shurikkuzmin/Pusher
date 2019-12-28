@@ -3,15 +3,26 @@ import pygame.transform
 from pygame.locals import *
 
 pygame.init()
-level1=[['*','*','*','*',' ',' ',' '],
-	    ['*','T',' ','*','*',' ',' '],
-	    ['*','T','H',' ','*',' ',' '],
-	    ['*','T',' ','B','*',' ',' '],
-	    ['*','*','B',' ','*','*','*'],
-	    [' ','*',' ','B',' ',' ','*'],
-        [' ','*',' ','T',' ',' ','*'],
-	    [' ','*',' ',' ','*','*','*'],
-	    [' ','*','*','*','*',' ',' ']]
+
+ ########
+##      #
+#   .   #
+#   $   #
+# .$@$. #
+####$   #
+   #.   #
+   #   ##
+   #####
+
+level1=[[' ','*','*','*','*','*','*','*','*'],
+        ['*','*',' ',' ',' ',' ',' ',' ','*'],
+        ['*',' ',' ',' ','T',' ',' ',' ','*'],
+        ['*',' ',' ',' ','B',' ',' ',' ','*'],
+        ['*',' ','T','B','H','B','T',' ','*'],
+        ['*','*','*','*','B',' ',' ',' ','*'],
+        [' ',' ',' ','*','T',' ',' ',' ','*'],
+        [' ',' ',' ','*',' ',' ',' ','*','*'],
+        [' ',' ',' ','*','*','*','*','*',' ']]
 
 rowSize = len(level1)
 columnSize = len(level1[0])
@@ -29,7 +40,7 @@ pygame.display.set_caption('Hello, World!')
 
 # Aqua      = (0, 255, 255)
 BLACK     = (0, 0, 0)
-#BLUE      = (0, 0, 255)
+BLUE      = (0, 0, 255)
 # Fuchsia   = (255, 0,255)
 # Gray      = (128, 128, 128)
 GREEN     = (0, 255, 0)
@@ -41,7 +52,7 @@ GREEN     = (0, 255, 0)
 #RED       = (255, 0, 0)
 # Silver    = (192, 192, 192)
 # Teal      = (0, 128, 128)
-# White     = (255, 255, 255)
+WHITE     = (255, 255, 255)
 RED       = (255, 0, 0)
 YELLOW    = (255, 255, 0)
 
@@ -108,11 +119,21 @@ def drawLevel():
                 SURFACE.blit(target,(tileWidth*column,row*tileHeight)) 
                 SURFACE.blit(hero,(tileWidth*column,row*tileHeight))
 
+def checkWin():
+    for row in range(rowSize):
+        for column in range(columnSize):
+            if level1[row][column] == "B":
+                return False
+    return True
+
+gameOver = False
 while True:
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
+        if gameOver == True:
+            continue
         if event.type == KEYDOWN:
             if event.key == K_RIGHT:
                 hero = heroRight
@@ -153,7 +174,7 @@ while True:
                         level1[yNew2][xNew2] = "G"
                     elif level1[yNew2][xNew2] == " ":
                         level1[yNew2][xNew2] = "B"
-                    elif level1[yNew2][xNew] == "*":   
+                    elif level1[yNew2][xNew2] == "*" or level1[yNew2][xNew2]=="B" or level1[yNew2][xNew2]=="G":   
                         continue
                     
                     level1[yHero][xHero] = oldTile
@@ -163,14 +184,23 @@ while True:
                         level1[yNew][xNew]  = "H"
                     xHero = xNew
                     yHero = yNew
-                elif level1[yNew][xNew] == " ":
-                    level1[yNew][xNew] = "H"
+                elif level1[yNew][xNew] == " " or level1[yNew][xNew] == "T":
+                    if level1[yNew][xNew] == " ":
+                        level1[yNew][xNew] = "H"
+                    elif level1[yNew][xNew] == "T":
+                        level1[yNew][xNew] = "I"
                     level1[yHero][xHero] = oldTile 
                     xHero = xNew
                     yHero = yNew
-    drawLevel()       
+    drawLevel()
+    if checkWin() == True:
+         basicFont = pygame.font.SysFont(None, 30)
+         text = basicFont.render('Game Over!', True, WHITE, BLUE)
+         textRect = text.get_rect()
+         textRect.centerx = WINDOWLENGTH/2
+         textRect.centery = WINDOWHEIGHT/2
+         SURFACE.blit(text,textRect)
+         gameOver = True
+         
                 
-                
-            
-    
     pygame.display.update()   
